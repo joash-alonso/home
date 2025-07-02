@@ -1,0 +1,376 @@
+/* Timeline Section */
+.timeline-section {
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background: transparent;
+}
+
+.timeline-container {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Timeline Curved Track - Positioned on Right */
+.timeline-line {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Timeline Content Container */
+.timeline-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+/* Timeline Items */
+.timeline-item {
+    position: relative;
+    margin-bottom: 12rem;
+    padding-left: 2rem;
+    min-height: 200px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+/* Timeline Circle */
+.timeline-circle {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 14px;
+    height: 14px;
+    background: rgba(160, 160, 160, 0.9);
+    border: 2px solid rgba(200, 200, 200, 0.3);
+    border-radius: 50%;
+    z-index: 3;
+    box-shadow: 0 2px 10px rgba(160, 160, 160, 0.5);
+}
+
+.timeline-item.centered .timeline-circle {
+    width: 18px;
+    height: 18px;
+    background: rgba(200, 200, 200, 0.95);
+    border-color: rgba(220, 220, 220, 0.5);
+}
+
+/* Timeline Cards */
+.timeline-card {
+    background: rgba(40, 40, 40, 0.95);
+    border-radius: 12px;
+    padding: 1rem;
+    position: absolute;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(100, 100, 100, 0.3);
+    width: 40vw;
+    max-width: 40vw;
+    transform-origin: right center;
+}
+
+.timeline-card:hover {
+    transform: translateX(-5px);
+    border-color: rgba(150, 150, 150, 0.5);
+}
+
+/* Card States */
+.timeline-item.centered .timeline-card {
+    transform: translateX(-10px) scale(1.05);
+    border-color: rgba(160, 160, 160, 0.6);
+    background: rgba(50, 50, 50, 0.98);
+}
+
+/* Collapsed Card (default state) */
+.timeline-card .card-highlights {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-top: 0;
+}
+
+/* Expanded Card (when centered) - handled by GSAP */
+.timeline-item.centered .timeline-card .card-highlights {
+    margin-top: 1rem;
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #f5f5f5;
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.card-company {
+    font-size: 0.95rem;
+    color: rgba(220, 220, 220, 0.95);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.card-type {
+    background: linear-gradient(135deg, rgba(130, 130, 130, 0.8), rgba(110, 110, 110, 0.8));
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(130, 130, 130, 0.4);
+}
+
+/* Card Meta Information */
+.card-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.85rem;
+    color: rgba(240, 240, 240, 0.85);
+    flex-wrap: wrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.card-location,
+.card-role-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-location i,
+.card-role-type i {
+    width: 16px;
+    color: rgba(160, 160, 160, 0.8);
+}
+
+/* Card Highlights (expandable section) */
+
+.highlights-list {
+    list-style: none;
+    padding: 0;
+}
+
+.highlight-item {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.4rem;
+    color: rgba(230, 230, 230, 0.9);
+    line-height: 1.4;
+    font-size: 0.85rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.highlight-item::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: rgba(160, 160, 160, 0.8);
+    font-size: 1rem;
+    top: 0.1rem;
+}
+
+/* Card Technologies */
+.card-technologies {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(120, 120, 120, 0.3);
+}
+
+.technologies-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-item {
+    background: rgba(120, 120, 120, 0.4);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: rgba(250, 250, 250, 0.95);
+    transition: all 0.2s ease;
+    border: 1px solid rgba(150, 150, 150, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.tech-item:hover {
+    background: rgba(130, 130, 130, 0.4);
+    transform: translateY(-1px);
+    border-color: rgba(150, 150, 150, 0.6);
+}
+
+/* Animation States */
+.timeline-item {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.5s ease;
+}
+
+.timeline-item.entering {
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.timeline-item.exiting {
+    opacity: 0;
+    transform: translateY(-50px);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1023px) {
+    .timeline-section {
+        height: 60vh;
+        order: 2;
+    }
+
+    .timeline-line {
+        width: 120px;
+        right: 10px;
+    }
+
+    .timeline-item {
+        margin-bottom: 2rem;
+        padding-left: 1rem;
+    }
+
+    .timeline-card {
+        max-width: calc(100vw - 140px);
+        width: calc(100vw - 140px);
+        padding: 0.8rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-company {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .timeline-section {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 200vh;
+        padding: 0;
+        z-index: 1;
+    }
+
+    .timeline-container {
+        height: auto;
+        position: relative;
+    }
+
+    .timeline-content {
+        position: relative;
+        height: auto;
+        transform: none !important;
+        padding: 1rem;
+        padding-bottom: 50vh;
+    }
+
+    .timeline-line {
+        display: none;
+    }
+
+    .timeline-item {
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .timeline-circle {
+        display: none;
+    }
+
+    .timeline-card {
+        max-width: calc(100vw - 2rem);
+        width: calc(100vw - 2rem);
+        padding: 1rem;
+        position: relative;
+        left: 0;
+        transform: none !important;
+    }
+
+    .card-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-company {
+        font-size: 0.85rem;
+    }
+
+    .card-type {
+        align-self: flex-start;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .highlight-item {
+        font-size: 0.8rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .tech-item {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+}
+
+/* Smooth scrolling for timeline content */
+.timeline-content {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for timeline */
+.timeline-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.5);
+    border-radius: 2px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.7);
+}

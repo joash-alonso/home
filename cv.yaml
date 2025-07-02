@@ -1,0 +1,81 @@
+professional_experience:
+  - role: Tech Lead/AI Engineer
+    role_type: Contractor
+    company: AstraZeneca
+    location: Remote
+    start_date: Nov 2024
+    end_date: Apr 2025
+    highlights:
+      - Led a team of 6 to create a reusable RAG framework package.
+      - Researched and optimized entity resolution using n-gram vectors, embeddings, and prompt-engineering.
+      - Conducted feasibility analysis of Copilot Studio for agentic AI use cases.
+    assets:
+      - devicon-python-plain-wordmark colored
+      - devicon-streamlit-plain-wordmark colored
+      - devicon-amazonwebservices-plain-wordmark colored
+      - openai.png
+
+  - role: Senior Machine Learning Engineer
+    role_type: Permanent
+    company: Axion Ray
+    location: London
+    start_date: Dec 2023
+    end_date: Sep 2024
+    highlights:
+      - Developed entity extraction, canonicalisation, and refinement for a SaaS product.
+      - Built high-performance NER and relation extraction systems with up to 4000x speed improvements.
+      - Created MLFlow-backed agentic workflows deployed on GKE with Dagster orchestration.
+      - Integrated with GCP tools like Vertex AI, GKE, Mongo Atlas, and Cloud Run.
+    assets:
+      - python.png
+      - mongo.png
+      - langchain.png
+      - gcp.png
+      - mlflow.png
+
+  - role: Machine Learning Engineer, Assistant VP
+    role_type: Permanent
+    company: Swiss Re
+    location: Toronto
+    start_date: Sep 2022
+    end_date: Dec 2023
+    highlights:
+      - Delivered production-grade PDF extraction system into AzureML with full MLOps integration.
+      - Migrated 200+ models to AzureML; built cost-effective multi-model endpoints.
+      - Led LLM upskilling sessions; delivered theory and practical sessions across 14 weeks.
+      - Piloted developer productivity tools and improved onboarding/documentation.
+    assets:
+      - python.png
+      - azureml.png
+      - spacy.png
+      - openai.png
+      - mongo.png
+
+  - role: Senior Python Developer/Team Lead
+    role_type: Permanent
+    company: PixelMax
+    location: Manchester
+    start_date: Aug 2021
+    end_date: Jul 2022
+    highlights:
+      - Managed a team of 6 developers and collaborated with leadership on product strategy.
+      - Contributed to infrastructure for a video conferencing platform, reducing costs by 40%.
+      - Developed scalable backend features such as live messaging, analytics, and user management.
+    assets:
+      - python.png
+      - golang.png
+      - aws.png
+      - webrtc.png
+
+  - role: Data Scientist
+    role_type: Permanent
+    company: Multiple Companies
+    location: United Kingdom
+    highlights:
+      - Built models for transactional data and B2B propensity scoring using xgboost, keras, etc.
+      - Co-created an open-source segmentation package with CI/CD support.
+      - Optimized a name redaction module, reducing runtime from >1 day to <1 hour.
+    assets:
+      - python.png
+      - aws.png
+      - jupyter.png
