@@ -10,7 +10,7 @@ class Timeline {
         this.itemHeight = 0;
         // Dynamic gap based on screen size - mobile needs more space for expanded cards
         this.updateGap();
-        this.animationSpeed = 0.5; // pixels per frame (increased speed)
+        this.animationSpeed = 0.5; // pixels per frame
         this.currentPosition = 0;
         this.userScrollTimeout = null;
         this.isUserScrolling = false;
@@ -71,9 +71,9 @@ class Timeline {
             }
         });
 
-        this.container.addEventListener('touchend', (e) => {
+        this.container.addEventListener('touchend', () => {
             if (window.innerWidth > 767) {
-                this.handleTouchEnd(e);
+                this.handleTouchEnd();
             }
         });
     }
@@ -99,14 +99,19 @@ class Timeline {
         // Update position more responsively
         this.currentPosition += scrollDirection * scrollSpeed;
 
-        // Keep within bounds with seamless looping
-        const originalItemsCount = this.items.length / 2;
-        const maxPosition = this.itemHeight * originalItemsCount;
-
+        // Ensure we don't go below 0
         if (this.currentPosition < 0) {
-            this.currentPosition = maxPosition + this.currentPosition;
-        } else if (this.currentPosition >= maxPosition) {
-            this.currentPosition = this.currentPosition - maxPosition;
+            this.currentPosition = 0;
+        }
+
+        // Check if we need to append more items when manually scrolling forward
+        const totalHeight = this.itemHeight * this.items.length;
+        const visibleHeight = this.containerHeight;
+        const bufferHeight = visibleHeight * 4;
+        
+        if (this.currentPosition > totalHeight - bufferHeight) {
+            this.appendMoreItems(this.data.professional_experience.length);
+            setTimeout(() => this.calculateDimensions(), 50);
         }
 
         // Resume auto-animation after delay
@@ -129,20 +134,25 @@ class Timeline {
         const touchScrollSpeed = 2;
         this.currentPosition += deltaY * touchScrollSpeed;
 
-        // Keep within bounds
-        const originalItemsCount = this.items.length / 2;
-        const maxPosition = this.itemHeight * originalItemsCount;
-
+        // Ensure we don't go below 0
         if (this.currentPosition < 0) {
-            this.currentPosition = maxPosition + this.currentPosition;
-        } else if (this.currentPosition >= maxPosition) {
-            this.currentPosition = this.currentPosition - maxPosition;
+            this.currentPosition = 0;
+        }
+
+        // Check if we need to append more items when touch scrolling forward
+        const totalHeight = this.itemHeight * this.items.length;
+        const visibleHeight = this.containerHeight;
+        const bufferHeight = visibleHeight * 4;
+        
+        if (this.currentPosition > totalHeight - bufferHeight) {
+            this.appendMoreItems(this.data.professional_experience.length);
+            setTimeout(() => this.calculateDimensions(), 50);
         }
 
         this.touchStartY = touchY;
     }
 
-    handleTouchEnd(e) {
+    handleTouchEnd() {
         this.touchStartY = null;
         this.resumeAutoAnimationDelayed();
     }
@@ -189,10 +199,10 @@ class Timeline {
         this.currentPosition = 0;
         this.content.style.transform = 'translateY(0px)';
 
-        // Show only original items (not duplicates) and expand all cards
+        // Show only the original set of items on mobile
         this.items.forEach((item, index) => {
-            // Only show first half of items (original experiences, not duplicates)
-            if (index < this.items.length / 2) {
+            // Show only the first set of experiences (original items)
+            if (index < this.data.professional_experience.length) {
                 item.style.display = 'flex';
                 item.classList.add('centered');
                 
@@ -208,7 +218,7 @@ class Timeline {
                     card.style.transform = 'none';
                 }
             } else {
-                // Hide duplicate items on mobile
+                // Hide dynamically appended items on mobile
                 item.style.display = 'none';
             }
         });
@@ -244,19 +254,48 @@ class Timeline {
 
         if (!this.data || !this.data.professional_experience) return;
 
-        // Create items for each experience
-        this.data.professional_experience.forEach((exp, index) => {
+        const experiences = this.data.professional_experience;
+
+        // Create initial items for each experience
+        experiences.forEach((exp, index) => {
             const item = this.createTimelineItem(exp, index);
             this.content.appendChild(item);
             this.items.push(item);
         });
 
-        // Duplicate items for seamless loop
-        this.data.professional_experience.forEach((exp, index) => {
-            const item = this.createTimelineItem(exp, index + this.data.professional_experience.length);
+        // Pre-load additional cycles to prevent rendering delays
+        // This ensures smooth transitions when cycling through experiences
+        for (let cycle = 1; cycle <= 2; cycle++) {
+            experiences.forEach((exp, index) => {
+                const item = this.createTimelineItem(exp, this.items.length);
+                this.content.appendChild(item);
+                this.items.push(item);
+            });
+        }
+
+        // Initialize the cycling index for infinite appending
+        this.cycleIndex = experiences.length * 3; // Start after pre-loaded cycles
+    }
+
+    // Dynamically append more items for infinite scrolling
+    appendMoreItems(count = 1) {
+        if (!this.data || !this.data.professional_experience) return;
+
+        const experiences = this.data.professional_experience;
+        
+        for (let i = 0; i < count; i++) {
+            // Cycle through experiences infinitely
+            const expIndex = this.cycleIndex % experiences.length;
+            const exp = experiences[expIndex];
+            
+            // Create new item with unique index
+            const item = this.createTimelineItem(exp, this.items.length);
             this.content.appendChild(item);
             this.items.push(item);
-        });
+            
+            // Advance cycle index
+            this.cycleIndex++;
+        }
     }
 
     createTimelineItem(exp, index) {
@@ -384,10 +423,16 @@ class Timeline {
         this.itemHeight = rect.height + this.gap;
         this.containerHeight = this.container.clientHeight;
 
+        // Ensure we have valid dimensions
+        if (this.itemHeight <= 0) {
+            this.itemHeight = 400; // Fallback height
+        }
+
         console.log('Timeline dimensions:', {
             itemHeight: this.itemHeight,
             containerHeight: this.containerHeight,
-            totalItems: this.items.length
+            totalItems: this.items.length,
+            gap: this.gap
         });
     }
 
@@ -423,13 +468,16 @@ class Timeline {
         if (!this.isUserScrolling) {
             this.currentPosition += this.animationSpeed;
 
-            // Calculate loop point (when we've moved one full set of items)
-            const originalItemsCount = this.items.length / 2;
-            const maxPosition = this.itemHeight * originalItemsCount;
-
-            // Seamless loop with modulo to prevent stuttering
-            if (this.currentPosition >= maxPosition) {
-                this.currentPosition = this.currentPosition - maxPosition;
+            // Check if we need to append more items for infinite scrolling
+            const totalHeight = this.itemHeight * this.items.length;
+            const visibleHeight = this.containerHeight;
+            const bufferHeight = visibleHeight * 4; // Keep 4 screen heights ahead for smoother rendering
+            
+            // If we're getting close to the end, append more items
+            if (this.currentPosition > totalHeight - bufferHeight) {
+                this.appendMoreItems(this.data.professional_experience.length);
+                // Force recalculation of dimensions after adding items
+                setTimeout(() => this.calculateDimensions(), 50);
             }
         }
 
