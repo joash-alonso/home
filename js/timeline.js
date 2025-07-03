@@ -337,6 +337,7 @@ class Timeline {
         if (!svgElement) return { x: 0, progress: 0 };
 
         const svgRect = svgElement.getBoundingClientRect();
+        const containerRect = this.container.getBoundingClientRect();
         const isMobile = window.innerWidth <= 767;
 
         if (isMobile) {
@@ -349,17 +350,20 @@ class Timeline {
         }
 
         // For desktop/tablet: SVG path is at x=70 in viewBox "0 0 100 100"
-        // Scale to actual SVG dimensions
-        const lineX = 70; // SVG path x coordinate
-        const relativeX = (lineX / 100) * svgRect.width;
-        const absoluteX = svgRect.left + relativeX;
-
+        // More precise calculation accounting for SVG positioning
+        const lineX = 70; // SVG path x coordinate in viewBox
+        const svgWidth = svgRect.width;
+        const svgLeft = svgRect.left;
+        
+        // Calculate the exact pixel position of the line within the SVG
+        const linePixelX = (lineX / 100) * svgWidth;
+        const absoluteLineX = svgLeft + linePixelX;
+        
         // Convert to position relative to timeline container
-        const containerRect = this.container.getBoundingClientRect();
-        const x = absoluteX - containerRect.left;
+        const relativeX = absoluteLineX - containerRect.left;
 
         return {
-            x: x,
+            x: relativeX,
             progress: Math.max(0, Math.min(1, circleTop / this.containerHeight))
         };
     }
@@ -460,11 +464,12 @@ class Timeline {
             const card = item.querySelector('.timeline-card');
 
             if (circle && card) {
-                // Position circle centered on the line stroke
+                // Position circle perfectly centered on the line stroke
                 const circleSize = 18; // Always expanded size
+                const circleRadius = circleSize / 2;
                 
                 gsap.set(circle, {
-                    x: linePos.x - (circleSize / 2),
+                    x: linePos.x - circleRadius,
                     y: '0px'
                 });
 
