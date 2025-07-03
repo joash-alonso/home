@@ -10,7 +10,7 @@ class Timeline {
         this.itemHeight = 0;
         // Dynamic gap based on screen size - mobile needs more space for expanded cards
         this.updateGap();
-        this.animationSpeed = 0.3; // pixels per frame (reduced for smoother animation)
+        this.animationSpeed = 0.5; // pixels per frame (increased speed)
         this.currentPosition = 0;
         this.userScrollTimeout = null;
         this.isUserScrolling = false;
@@ -386,7 +386,10 @@ class Timeline {
             cancelAnimationFrame(this.animationId);
         }
 
-        // Initialize position
+        // Ensure dimensions are calculated
+        this.calculateDimensions();
+        
+        // Initialize position - cards will naturally move upward like a snake
         this.currentPosition = 0;
 
         this.animate();

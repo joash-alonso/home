@@ -179,7 +179,7 @@ class NetworkGraph {
     }
     
     updateNodePositions() {
-        const baseProgress = (Math.sin(this.time * 0.0008) + 1) / 2;
+        const baseProgress = (Math.sin(this.time * 0.0001) + 1) / 2;
         
         this.nodes.forEach(node => {
             let nodeProgress = baseProgress * node.speed % 1;
@@ -250,11 +250,11 @@ class NetworkGraph {
                     // Complex random-like movement with multiple sine waves
                     const rProgress = nodeProgress;
                     x = node.startX + (node.pathX - node.startX) * rProgress + 
-                        Math.sin(rProgress * Math.PI * 2 + this.time * 0.0005) * 5 +
-                        Math.cos(rProgress * Math.PI * 3 + this.time * 0.0003) * 2;
+                        Math.sin(rProgress * Math.PI * 2 + this.time * 0.00008) * 5 +
+                        Math.cos(rProgress * Math.PI * 3 + this.time * 0.00006) * 2;
                     y = node.startY + (node.pathY - node.startY) * rProgress + 
-                        Math.cos(rProgress * Math.PI * 2.5 + this.time * 0.0004) * 4 +
-                        Math.sin(rProgress * Math.PI * 1.7 + this.time * 0.0006) * 1.5;
+                        Math.cos(rProgress * Math.PI * 2.5 + this.time * 0.00008) * 4 +
+                        Math.sin(rProgress * Math.PI * 1.7 + this.time * 0.0001) * 1.5;
                     break;
             }
             
@@ -263,7 +263,7 @@ class NetworkGraph {
             node.currentY = Math.max(1, Math.min(99, y));
             
             // Add subtle global breathing effect
-            const breathingOffset = Math.sin(this.time * 0.0003 + node.id.charCodeAt(4)) * 0.5;
+            const breathingOffset = Math.sin(this.time * 0.00005 + node.id.charCodeAt(4)) * 0.5;
             node.currentX += breathingOffset;
             node.currentY += breathingOffset * 0.3;
         });
@@ -323,7 +323,7 @@ class NetworkGraph {
             circle.setAttribute('r', node.size * 0.15); // Scale size for SVG viewBox
             
             // Dynamic opacity based on node movement and size
-            const pulseOpacity = 0.7 + 0.3 * Math.sin(this.time * 0.002 + node.id.charCodeAt(4));
+            const pulseOpacity = 0.7 + 0.3 * Math.sin(this.time * 0.0005 + node.id.charCodeAt(4));
             const baseOpacity = node.size > 3 ? 0.9 : node.size > 2 ? 0.7 : 0.5;
             
             // Use gradient for larger nodes, solid color for smaller ones

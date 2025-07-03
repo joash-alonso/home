@@ -71,6 +71,8 @@ professional_experience:
     role_type: Permanent
     company: Multiple Companies
     location: United Kingdom
+    start_date: Jan 2020
+    end_date: Jun 2022
     highlights:
       - Built models for transactional data and B2B propensity scoring using xgboost, keras, etc.
       - Co-created an open-source segmentation package with CI/CD support.
