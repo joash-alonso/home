@@ -216,21 +216,21 @@ class Timeline {
 
 
     setupDesktopMode() {
-        // Show all items (including duplicates)
+        // Show all items (including duplicates) and expand all cards
         this.items.forEach(item => {
             item.style.display = 'flex';
-            item.classList.remove('centered');
+            item.classList.add('centered'); // Keep all cards expanded
 
             const highlights = item.querySelector('.card-highlights');
             const card = item.querySelector('.timeline-card');
 
             if (highlights) {
-                highlights.style.maxHeight = '0px';
-                highlights.style.opacity = '0';
+                highlights.style.maxHeight = '300px'; // Keep expanded
+                highlights.style.opacity = '1';
             }
 
             if (card) {
-                card.style.transform = 'scale(1)';
+                card.style.transform = 'scale(1.05)'; // Keep slightly scaled
             }
         });
 
@@ -264,17 +264,23 @@ class Timeline {
         item.className = 'timeline-item';
         item.dataset.index = index;
 
-        // Handle assets (which might be just strings)
-        const assets = exp.assets || [];
+        // Handle assets using SVG icons - ensure uniqueness
+        const rawAssets = exp.assets || [];
+        const assets = [...new Set(rawAssets)]; // Remove duplicates
         const techHtml = assets.map(asset => {
-            // If asset is just a string, try to extract technology name
-            const techName = typeof asset === 'string' ?
-                asset.replace(/devicon-|-plain|-wordmark|-colored|\.png/g, '').replace(/([A-Z])/g, ' $1').trim() :
-                asset.name || asset;
-
-            return `<div class="tech-item">
-                <span>${techName}</span>
-            </div>`;
+            const assetKey = typeof asset === 'string' ? asset : asset.name || asset;
+            const assetInfo = window.getAssetInfo ? window.getAssetInfo(assetKey) : null;
+            
+            if (assetInfo && assetInfo.icon) {
+                return `<div class="tech-icon" title="${assetInfo.name}">
+                    <img src="${assetInfo.icon}" alt="${assetInfo.name}" />
+                </div>`;
+            } else {
+                // Fallback for unknown assets
+                return `<div class="tech-icon tech-icon-fallback" title="${assetKey}">
+                    <span>${assetKey.charAt(0).toUpperCase()}</span>
+                </div>`;
+            }
         }).join('');
 
         const highlightsHtml = exp.highlights ? exp.highlights.map(highlight =>
@@ -313,7 +319,7 @@ class Timeline {
                 </div>
 
                 <div class="card-technologies">
-                    <div class="technologies-grid">
+                    <div class="technologies-icons">
                         ${techHtml}
                     </div>
                 </div>
@@ -417,20 +423,20 @@ class Timeline {
             const originalItemsCount = this.items.length / 2;
             const maxPosition = this.itemHeight * originalItemsCount;
 
-            // Reset position for seamless loop
+            // Seamless loop with modulo to prevent stuttering
             if (this.currentPosition >= maxPosition) {
-                this.currentPosition = 0;
+                this.currentPosition = this.currentPosition - maxPosition;
             }
         }
 
-        // Always apply transform and check centered items (desktop only)
+        // Always apply transform and update positioning (desktop only)
         this.content.style.transform = `translateY(-${this.currentPosition}px)`;
-        this.checkCenteredItem();
+        this.updateItemPositions();
 
         this.animationId = requestAnimationFrame(() => this.animate());
     }
 
-    checkCenteredItem() {
+    updateItemPositions() {
         const isMobile = window.innerWidth <= 767;
         
         // Skip positioning logic on mobile - cards are already positioned by CSS
@@ -438,9 +444,6 @@ class Timeline {
             return;
         }
         
-        const containerHeight = this.containerHeight;
-        const expansionZoneTop = containerHeight * 0.10; // 10% from top
-        const expansionZoneBottom = containerHeight * 0.90; // 90% from top
         // Adjust spacing based on screen size
         const isTablet = window.innerWidth <= 1023;
         const constantSpacing = isTablet ? 45 : 60;
@@ -458,9 +461,7 @@ class Timeline {
 
             if (circle && card) {
                 // Position circle centered on the line stroke
-                // Responsive circle sizes to match CSS
-                const isExpanded = item.classList.contains('centered');
-                const circleSize = isExpanded ? 18 : 14; // Desktop sizes
+                const circleSize = 18; // Always expanded size
                 
                 gsap.set(circle, {
                     x: linePos.x - (circleSize / 2),
@@ -475,65 +476,6 @@ class Timeline {
                     x: linePos.x - constantSpacing - cardWidth - extraGap,
                     y: '0px'
                 });
-            }
-
-            // Get current expansion state
-            const isCurrentlyExpanded = item.classList.contains('centered');
-            const shouldBeExpanded = circleTop >= expansionZoneTop && circleTop <= expansionZoneBottom;
-
-            // Check if circle is in expansion zone (10% to 90% of screen height)
-            if (shouldBeExpanded && !isCurrentlyExpanded) {
-                item.classList.add('centered');
-
-                // Use GSAP for smooth expansion
-                const highlights = item.querySelector('.card-highlights');
-
-                if (highlights && card) {
-                    gsap.to(highlights, {
-                        duration: 0.3,
-                        maxHeight: '300px',
-                        opacity: 1,
-                        ease: 'power2.out',
-                        onComplete: () => {
-                            // Recalculate dimensions after expansion on mobile
-                            if (window.innerWidth <= 767) {
-                                setTimeout(() => this.calculateDimensions(), 100);
-                            }
-                        }
-                    });
-
-                    gsap.to(card, {
-                        duration: 0.3,
-                        scale: 1.05,
-                        ease: 'power2.out'
-                    });
-                }
-            } else if (!shouldBeExpanded && isCurrentlyExpanded) {
-                item.classList.remove('centered');
-
-                // Use GSAP for smooth collapse
-                const highlights = item.querySelector('.card-highlights');
-
-                if (highlights && card) {
-                    gsap.to(highlights, {
-                        duration: 0.2,
-                        maxHeight: '0px',
-                        opacity: 0,
-                        ease: 'power2.in',
-                        onComplete: () => {
-                            // Recalculate dimensions after collapse on mobile
-                            if (window.innerWidth <= 767) {
-                                setTimeout(() => this.calculateDimensions(), 100);
-                            }
-                        }
-                    });
-
-                    gsap.to(card, {
-                        duration: 0.2,
-                        scale: 1,
-                        ease: 'power2.in'
-                    });
-                }
             }
         });
     }

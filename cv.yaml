@@ -10,10 +10,13 @@ professional_experience:
       - Researched and optimized entity resolution using n-gram vectors, embeddings, and prompt-engineering.
       - Conducted feasibility analysis of Copilot Studio for agentic AI use cases.
     assets:
-      - devicon-python-plain-wordmark colored
-      - devicon-streamlit-plain-wordmark colored
-      - devicon-amazonwebservices-plain-wordmark colored
-      - openai.png
+      - python
+      - openai
+      - fastapi
+      - aws
+      - docker
+      - gha
+      - streamlit
 
   - role: Senior Machine Learning Engineer
     role_type: Permanent
@@ -27,11 +30,15 @@ professional_experience:
       - Created MLFlow-backed agentic workflows deployed on GKE with Dagster orchestration.
       - Integrated with GCP tools like Vertex AI, GKE, Mongo Atlas, and Cloud Run.
     assets:
-      - python.png
-      - mongo.png
-      - langchain.png
-      - gcp.png
-      - mlflow.png
+      - python
+      - mongo
+      - langchain
+      - gcp
+      - mlflow
+      - pandas
+      - streamlit
+      - docker
+      - gha
 
   - role: Machine Learning Engineer, Assistant VP
     role_type: Permanent
@@ -45,11 +52,17 @@ professional_experience:
       - Led LLM upskilling sessions; delivered theory and practical sessions across 14 weeks.
       - Piloted developer productivity tools and improved onboarding/documentation.
     assets:
-      - python.png
-      - azureml.png
-      - spacy.png
-      - openai.png
-      - mongo.png
+      - python
+      - azureml
+      - spacy
+      - openai
+      - mongo
+      - postgres
+      - pandas
+      - numpy
+      - jupyter
+      - streamlit
+
 
   - role: Senior Python Developer/Team Lead
     role_type: Permanent
@@ -62,10 +75,11 @@ professional_experience:
       - Contributed to infrastructure for a video conferencing platform, reducing costs by 40%.
       - Developed scalable backend features such as live messaging, analytics, and user management.
     assets:
-      - python.png
-      - golang.png
-      - aws.png
-      - webrtc.png
+      - python
+      - golang
+      - mongo
+      - aws
+      - webrtc
 
   - role: Data Scientist
     role_type: Permanent
@@ -78,6 +92,10 @@ professional_experience:
       - Co-created an open-source segmentation package with CI/CD support.
       - Optimized a name redaction module, reducing runtime from >1 day to <1 hour.
     assets:
-      - python.png
-      - aws.png
-      - jupyter.png
+      - python
+      - aws
+      - jupyter
+      - pandas
+      - numpy
+      - postgres
+      - sklearn

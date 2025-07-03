@@ -18,8 +18,8 @@ class PortfolioApp {
             this.timeline = new Timeline('.timeline-container');
             await this.timeline.initialize(this.data);
             
-            // Populate skills
-            this.populateSkills();
+            // Populate skills grid
+            this.populateSkillsGrid();
             
             // Hide loading state
             this.hideLoadingState();
@@ -168,18 +168,43 @@ class PortfolioApp {
         document.body.appendChild(errorMessage);
     }
 
-    populateSkills() {
-        const skillsContainer = document.getElementById('skillsContainer');
-        if (!skillsContainer) return;
+    populateSkillsGrid() {
+        const skillsGrid = document.getElementById('skillsGrid');
+        if (!skillsGrid || !this.data) return;
         
-        const technologies = this.yamlLoader.getAllTechnologies();
+        // Collect all unique assets from all experiences
+        const allAssets = new Set();
         
-        skillsContainer.innerHTML = technologies.map(tech => `
-            <div class="skill-item">
-                <i class="${tech.icon}"></i>
-                <span>${tech.name}</span>
-            </div>
-        `).join('');
+        if (this.data.professional_experience) {
+            this.data.professional_experience.forEach(exp => {
+                if (exp.assets) {
+                    exp.assets.forEach(asset => {
+                        allAssets.add(asset);
+                    });
+                }
+            });
+        }
+        
+        // Convert to array and sort alphabetically
+        const uniqueAssets = Array.from(allAssets).sort();
+        
+        // Generate HTML for each skill icon
+        const skillsHtml = uniqueAssets.map(assetKey => {
+            const assetInfo = window.getAssetInfo ? window.getAssetInfo(assetKey) : null;
+            
+            if (assetInfo && assetInfo.icon) {
+                return `<div class="skill-icon" title="${assetInfo.name}">
+                    <img src="${assetInfo.icon}" alt="${assetInfo.name}" />
+                </div>`;
+            } else {
+                // Fallback for unknown assets
+                return `<div class="skill-icon skill-icon-fallback" title="${assetKey}">
+                    <span>${assetKey.charAt(0).toUpperCase()}</span>
+                </div>`;
+            }
+        }).join('');
+        
+        skillsGrid.innerHTML = skillsHtml;
     }
 
 

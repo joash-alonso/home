@@ -229,7 +229,91 @@ body::after {
 
 /* Skills Section */
 .skills-section {
-    margin-top: 1rem;
+    margin-top: 0;
+}
+
+.skills-separator {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.skill-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 6px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    position: relative;
+}
+
+.skill-icon:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.skill-icon img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+    filter: brightness(1.1);
+}
+
+.skill-icon:hover img {
+    transform: scale(1.15);
+    filter: brightness(1.3);
+}
+
+.skill-icon-fallback {
+    background: rgba(100, 100, 100, 0.6);
+    border-color: rgba(120, 120, 120, 0.4);
+}
+
+.skill-icon-fallback span {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Tooltip for skill names */
+.skill-icon::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.skill-icon:hover::after {
+    opacity: 1;
 }
 
 .summary-section h3 {
@@ -439,6 +523,34 @@ body::after {
         width: 40px;
         height: 40px;
         font-size: 1.2rem;
+    }
+    
+    .skills-section {
+        margin-top: 0;
+    }
+    
+    .skills-separator {
+        margin-bottom: 0.8rem;
+    }
+    
+    .skills-grid {
+        gap: 0.5rem;
+    }
+    
+    .skill-icon {
+        width: 32px;
+        height: 32px;
+        padding: 4px;
+    }
+    
+    .skill-icon img {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .skill-icon::after {
+        font-size: 10px;
+        bottom: -30px;
     }
     
     /* Mobile Global Timeline Line */
